@@ -1,0 +1,13 @@
+application:
+  development:
+     feature1: true
+     feature2: false
+  stage:
+     feature1: true
+     feature2: false
+otherApplication:
+  development:
+     feature1: true
+     feature2: false
+
+

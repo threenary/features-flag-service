@@ -1,0 +1,14 @@
+server:
+  development:
+     feature1: true
+     feature2: true
+  stage:
+     feature1: true
+     feature2: true
+     feature3: false
+mobile:
+  development:
+     feature1: true
+     feature2: false
+
+
