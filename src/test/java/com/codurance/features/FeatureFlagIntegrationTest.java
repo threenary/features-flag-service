@@ -25,7 +25,7 @@ class FeatureFlagIntegrationTest {
     @Test
     void
     return_the_feature_flag_value_for_the_component() throws Exception {
-        MvcResult result = mockMvc.perform(get("/application/feature1"))
+        MvcResult result = mockMvc.perform(get("/feature1"))
                 .andExpect(status().isOk())
                 .andReturn();
 
@@ -35,17 +35,7 @@ class FeatureFlagIntegrationTest {
     @Test
     void
     return_false_when_feature_does_not_exist() throws Exception {
-        MvcResult result = mockMvc.perform(get("/application/nonExistingFeature"))
-                .andExpect(status().isOk())
-                .andReturn();
-
-        assertFalse(Boolean.parseBoolean(result.getResponse().getContentAsString()));
-    }
-
-    @Test
-    void
-    return_false_when_component_does_not_exist() throws Exception {
-        MvcResult result = mockMvc.perform(get("/nonExistingComponent/feature1"))
+        MvcResult result = mockMvc.perform(get("/nonExistingFeature"))
                 .andExpect(status().isOk())
                 .andReturn();
 

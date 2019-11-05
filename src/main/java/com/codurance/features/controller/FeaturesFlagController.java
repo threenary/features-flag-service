@@ -14,8 +14,8 @@ public class FeaturesFlagController {
         this.featureService = featureService;
     }
 
-    @GetMapping("/{component}/{feature}")
-    public boolean getFeature(@PathVariable String component, @PathVariable String feature) {
-        return featureService.getFeatureForComponent(component, feature);
+    @GetMapping("/{feature}")
+    public boolean getFeature(@PathVariable String feature) {
+        return featureService.getFeatureFlagValue(feature);
     }
 }

@@ -1,13 +1,11 @@
-application:
-  development:
-     feature1: true
-     feature2: false
-  stage:
-     feature1: true
-     feature2: false
-otherApplication:
-  development:
-     feature1: true
-     feature2: false
+development:
+  feature1: true
+  feature2: true
+stage:
+  feature1: true
+  feature2: false
+production:
+  feature1: false
+  feature2: false
 
 

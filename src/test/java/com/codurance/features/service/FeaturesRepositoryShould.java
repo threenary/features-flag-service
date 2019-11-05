@@ -1,7 +1,6 @@
 package com.codurance.features.service;
 
 import com.codurance.features.config.ConfigReader;
-import com.codurance.features.domain.ComponentFeaturesMap;
 import com.codurance.features.domain.EnvironmentFeaturesMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,8 +18,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class FeaturesRepositoryShould {
 
-    private static final String APPLICATION = "application";
-    private static final String NON_EXISTING_COMPONENT = "anyOtherComponent";
     private static final String DEVELOPMENT = "development";
     private static final String ENABLED_FEATURE = "enabled_feature";
     private static final String DISABLED_FEATURE = "disabled_feature";
@@ -40,32 +37,25 @@ class FeaturesRepositoryShould {
     return_flags_map_for_the_component_in_the_environment() {
         when(reader.loadFeaturesFile(anyString())).thenReturn(buildApplicationFeaturesMap());
 
-        assertNotNull(featuresFlagRepository.getFeaturesForComponent(APPLICATION));
-        assertTrue(featuresFlagRepository.getFeaturesForComponent(APPLICATION).get(ENABLED_FEATURE));
-        assertFalse(featuresFlagRepository.getFeaturesForComponent(APPLICATION).get(DISABLED_FEATURE));
+        assertTrue(featuresFlagRepository.getFeatureFlagValue(ENABLED_FEATURE));
+        assertFalse(featuresFlagRepository.getFeatureFlagValue(DISABLED_FEATURE));
     }
 
-    @Test
-    void
-    return_null_flags_map_for_non_existing_component() {
-        when(reader.loadFeaturesFile(anyString())).thenReturn(buildApplicationFeaturesMap());
+    private Map<String, EnvironmentFeaturesMap> buildApplicationFeaturesMap() {
+        Map<String, EnvironmentFeaturesMap> applicationFeaturesMap = new HashMap<>();
 
-        assertNull(featuresFlagRepository.getFeaturesForComponent(NON_EXISTING_COMPONENT));
-    }
-
-    private Map<String, ComponentFeaturesMap> buildApplicationFeaturesMap() {
-        Map<String, ComponentFeaturesMap> applicationFeaturesMap = new HashMap<>();
-        ComponentFeaturesMap componentFeaturesMap = new ComponentFeaturesMap();
-        componentFeaturesMap.put(DEVELOPMENT, buildEnvironmentFeaturesMap());
-        applicationFeaturesMap.put(APPLICATION, componentFeaturesMap);
+        EnvironmentFeaturesMap environmentFeaturesMap = buildEnvironmentFeaturesMap();
+        applicationFeaturesMap.put(DEVELOPMENT, environmentFeaturesMap);
 
         return applicationFeaturesMap;
     }
 
     private EnvironmentFeaturesMap buildEnvironmentFeaturesMap() {
-        EnvironmentFeaturesMap environmentFeaturesMap = new EnvironmentFeaturesMap();
-        environmentFeaturesMap.put(ENABLED_FEATURE, true);
-        environmentFeaturesMap.put(DISABLED_FEATURE, false);
-        return environmentFeaturesMap;
+        return new EnvironmentFeaturesMap(
+                new HashMap<String, Boolean>() {{
+                    put(ENABLED_FEATURE, true);
+                    put(DISABLED_FEATURE, false);
+                }}
+        );
     }
 }

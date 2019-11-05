@@ -18,9 +18,9 @@ class FeaturesFlagControllerShould {
     @Test
     void
     return_feature_flag_value_for_the_component() {
-        when(service.getFeatureForComponent("component", "feature")).thenReturn(true);
+        when(service.getFeatureFlagValue("feature")).thenReturn(true);
         FeaturesFlagController controller = new FeaturesFlagController(service);
 
-        assertThat(controller.getFeature("component", "feature")).isTrue();
+        assertThat(controller.getFeature("feature")).isTrue();
     }
 }

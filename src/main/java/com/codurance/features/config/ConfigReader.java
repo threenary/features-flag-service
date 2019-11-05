@@ -1,6 +1,5 @@
 package com.codurance.features.config;
 
-import com.codurance.features.domain.ComponentFeaturesMap;
 import com.codurance.features.domain.EnvironmentFeaturesMap;
 import org.springframework.stereotype.Component;
 import org.yaml.snakeyaml.Yaml;
@@ -11,29 +10,24 @@ import java.util.Map;
 @Component
 public class ConfigReader {
 
-    public Map<String, ComponentFeaturesMap> loadFeaturesFile(String fileName) {
-        Map<String, Map<String, Map<String, Boolean>>> configuration = readYamlContent(fileName);
+    public Map<String, EnvironmentFeaturesMap> loadFeaturesFile(String fileName) {
+        Map<String, Map<String, Boolean>> readConfiguration = readYamlContent(fileName);
 
-        Map<String, ComponentFeaturesMap> configurationFeatures = new HashMap<>();
-        for (String component : configuration.keySet()) {
-            Map<String, Map<String, Boolean>> applicationMap = configuration.get(component);
-            ComponentFeaturesMap componentsMap = new ComponentFeaturesMap();
+        Map<String, EnvironmentFeaturesMap> configuredFeatures = new HashMap<>();
 
-            for (String environment : applicationMap.keySet()) {
-                EnvironmentFeaturesMap environmentsMap = new EnvironmentFeaturesMap();
-                environmentsMap.setEnvironmentFeaturesMap(applicationMap.get(environment));
+        for (String environment : readConfiguration.keySet()) {
+            EnvironmentFeaturesMap environmentFeaturesMap =
+                    new EnvironmentFeaturesMap(readConfiguration.get(environment));
 
-                componentsMap.put(environment, environmentsMap);
-            }
-            configurationFeatures.put(component, componentsMap);
+            configuredFeatures.put(environment, environmentFeaturesMap);
         }
-        return configurationFeatures;
+
+        return configuredFeatures;
     }
 
-    private Map<String, Map<String, Map<String, Boolean>>> readYamlContent(String fileName) {
-        Yaml yaml = new Yaml();
+    private Map<String, Map<String, Boolean>> readYamlContent(String fileName) {
 
-        return yaml.load(this.getClass()
+        return (new Yaml()).load(this.getClass()
                 .getClassLoader()
                 .getResourceAsStream(fileName));
     }

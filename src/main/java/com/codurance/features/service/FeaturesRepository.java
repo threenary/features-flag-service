@@ -1,7 +1,6 @@
 package com.codurance.features.service;
 
 import com.codurance.features.config.ConfigReader;
-import com.codurance.features.domain.ComponentFeaturesMap;
 import com.codurance.features.domain.EnvironmentFeaturesMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +17,7 @@ public class FeaturesRepository {
     private final String configurationFile;
     private final ConfigReader configReader;
 
-    private Map<String, ComponentFeaturesMap> repository = new HashMap<>();
+    private Map<String, EnvironmentFeaturesMap> repository = new HashMap<>();
 
     @Autowired
     public FeaturesRepository(
@@ -30,16 +29,16 @@ public class FeaturesRepository {
         this.configurationFile = configurationFile;
     }
 
-    public EnvironmentFeaturesMap getFeaturesForComponent(String component) {
+    public Boolean getFeatureFlagValue(String feature) {
         if (repository.isEmpty()) {
             init();
         }
-        return retrieveFeaturesForProfile(component);
+        return retrieveFeaturesForProfile(feature);
     }
 
-    private EnvironmentFeaturesMap retrieveFeaturesForProfile(String component) {
-        return (null != repository.get(component))
-                ? repository.get(component).get(activeProfile)
+    private Boolean retrieveFeaturesForProfile(String feature) {
+        return (null != repository.get(activeProfile))
+                ? repository.get(activeProfile).get(feature)
                 : null;
     }
 
